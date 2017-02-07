@@ -37,6 +37,16 @@ class JSGlue(object):
         @app.context_processor
         def context_processor():
             return {'JSGlue': JSGlue}
+        
+        @app.cli.command()
+        def create_jsglue():
+            """Initialize the database."""
+            click.echo('Creating glue.js file')
+            static_folder = app.config.get('STATIC_FOLDER')
+            filepath = os.path.join(static_folder, os.path.basename(JSGLUE_JS_PATH))
+            with open(filepath, 'w') as file:
+                file.write(self.generate_js())
+
 
     def generate_js(self):
         rules = get_routes(self.app)
